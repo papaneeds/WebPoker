@@ -4,6 +4,7 @@ from Lobby import Lobby
 from Game import Game
 from Player import Player
 from Table import Table
+from TexasHoldemGameDefinition import TexasHoldemGameDefinition
 
 # Create your lobby. In this lobby we will limit the number of players to 10
 lobby = Lobby("RubesAndDonks", 20)
@@ -46,8 +47,15 @@ while (numberOfEmptySeatsAtTable > 0):
         # seats to a negative number
         numberOfEmptySeatsAtTable = -1
 
-# Now, play the game
-game = Game(table)
-game.play()
+# There have to be at least 2 players to play the game.
+# If you have less than two players then wait until another 
+# player shows up.
+# ToDo: Implement the loop that waits for the second player
+#       to show up
+
+if table.getNumPlayers > 1:
+    # Now, play the game
+    game = Game(table, TexasHoldemGameDefinition)
+    game.play()
 
  

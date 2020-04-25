@@ -23,21 +23,20 @@ class Player:
         self.name = name 
         self.cards = None
 
-    def getId(self)
+    def getId(self):
         return self.id
 
-    def getStack(self)
+    def getStack(self):
         return self.stack
 
-    def setStack(self, stack)
+    def setStack(self, stack):
         self.stack = stack
 
-    def getName(self)
+    def getName(self):
         return self.name
 
-    def getCards(self)
+    def getCards(self):
         return self.cards
 
-    def setCards(self, cards)
+    def setCards(self, cards):
         self.cards = cards
-        

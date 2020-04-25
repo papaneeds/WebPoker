@@ -22,17 +22,27 @@ class TexasHoldemGameDefinition:
         # Texas hold'em has 
         self.numBettingRounds = 4
 
-        # numCards holds the number of hole cards and
+        # numCardsPerBettingRound holds the number of hole cards and
         # board cards to be dealt on each betting round
         # In the definition below there are:
         # bettingRound 0 (pre-flop) [2 hole cards, 0 board cards]
         # bettingRound 1 (flop)     [0 hole cards, 3 board cards]
         # bettingRound 2 (turn)     [0 hole cards, 1 board card]
         # bettingRound 3 (river)    [0 hole cards, 1 board card]
-        self.numCards = [[2, 0], [0, 3], [0, 1], [0, 1]]
+        self.numCardsPerBettingRound = [[2, 0], [0, 3], [0, 1], [0, 1]]
 
-        # blinds holds the blinds and antes as a function
+        # blindsAndANtes holds the blinds and antes as a function
         # of time.
-        self.blinds = BlindsAndAntes()
+        self.blindsAndAntes = BlindsAndAntes()
+
+    def getNumBettingRounds(self):
+        return self.numBettingRounds
+
+    def getBlinds(self):
+        return self.blindsAndAntes
+
+    def getNumCardsPerBettingRound(self):
+        return self.numCardsPerBettingRound
+
 
 

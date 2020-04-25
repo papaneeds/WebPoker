@@ -1,5 +1,5 @@
 class BlindsAndAntes:
-    def __init__(self)
+    def __init__(self):
         # The blinds and antes are defined by:
         # startTime 
         # [smallBlind, bigBlind]
@@ -12,13 +12,13 @@ class BlindsAndAntes:
         #
         self.blindsAndAntes = { [0,  [10, 20], 0], \
                                 [20, [20, 40], 0], \
-                                [40, [50, 100], 10] \
+                                [40, [50, 100], 10], \
                                 [60, [100, 200], 20]  }
 
 # The TexasHoldemGameDefinition encapsulates the
 # characteristics of a Texas Hold'em game
 class TexasHoldemGameDefinition:
-    def __init__(self)
+    def __init__(self):
         # Texas hold'em has 
         self.numBettingRounds = 4
 
@@ -29,10 +29,10 @@ class TexasHoldemGameDefinition:
         # bettingRound 1 (flop)     [0 hole cards, 3 board cards]
         # bettingRound 2 (turn)     [0 hole cards, 1 board card]
         # bettingRound 3 (river)    [0 hole cards, 1 board card]
-        self.numCards = [[2, 0]. [0, 3], [0, 1], [0, 1]]
+        self.numCards = [[2, 0], [0, 3], [0, 1], [0, 1]]
 
         # blinds holds the blinds and antes as a function
         # of time.
-        self.blinds = new BlindsAndAntes()
+        self.blinds = BlindsAndAntes()
 
 

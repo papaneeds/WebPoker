@@ -17,8 +17,27 @@ class TableState(Enum):
 # The Player class encapsulates the characteristics of
 # a poker player
 class Player:
-    def __init__(id, stack, name)
-    self.id = id
-    self.stack = stack
-    self.name = name 
-    self.cards = None
+    def __init__(self, id, stack, name):
+        self.id = id
+        self.stack = stack
+        self.name = name 
+        self.cards = None
+
+    def getId(self)
+        return self.id
+
+    def getStack(self)
+        return self.stack
+
+    def setStack(self, stack)
+        self.stack = stack
+
+    def getName(self)
+        return self.name
+
+    def getCards(self)
+        return self.cards
+
+    def setCards(self, cards)
+        self.cards = cards
+        

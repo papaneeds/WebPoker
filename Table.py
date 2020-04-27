@@ -113,7 +113,51 @@ class Table:
         else:
             return None
             
+    # This function returns a list of seatNumbers, starting
+    # at the player to the left of the dealer (the small blind), 
+    # which are currently occupied by
+    # players that have tableState = ACTIVE
+    # Returns: A list of active players
+    def getPlayersInHand(self):
+        occupiedSeatIndices = []
+        for i in range(self.dealerSeat+1, self.numSeats+dealerSeat+1):
+            seatNumber = i % self.numSeats
+            if self.seats[seatNumber] is not None:
+                # Check to make sure that is player is not busted
+                if self.seats[seatNumber].playerState == PlayerState.ACTIVE:
+                    occupiedSeatIndices.append(seatNumber)
+        return occupiedSeatIndices
+    
+    # This function returns the current bet at a seat
+    # Returns:
+    #   If successful: The current bet at seatNumber
+    #   If unsuccessful: None
+    def getCurrentBet(self, seatNumber):
+        if self.seats[seatNumber] is not None:
+            return self.seats[seatNumber].getCurrentBet()
+        else:
+            return None
 
+    # This function allows you to add to a current bet at seatNumber
+    # Returns : True if successful
+    #           False if unsuccessful
+    def addToCurrentBet(self, seatNumber, amount):
+        if self.seats[seatNumber] is not None:
+            self.seats[seatNumber].addToCurrentBet(amount)
+            return True
+        else:
+            return False  
+
+    # This function allows you to set the current bet at seatNumber
+    # Returns : True if successful
+    #           False if unsuccessful
+    def setCurrentBet(self, seatNumber, amount):
+        if self.seats[seatNumber] is not None:
+            self.seats[seatNumber].setCurrentBet(amount)
+            return True
+        else:
+            return False        
+    
     # This function sets the player state at the table.
     # The player's table state tells you whether the 
     # player is ACTIVE or BUSTED
@@ -178,4 +222,7 @@ class Seat:
 
     def setPlayer(self, player):
         self.player = player
+
+    def addToCurrentBet(self, amount)
+        self.currentBet += amount
 

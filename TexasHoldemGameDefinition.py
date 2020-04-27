@@ -1,19 +1,21 @@
+from datetime import datetime
+
 class BlindsAndAntes:
     def __init__(self):
         # The blinds and antes are defined by:
-        # startTime 
+        # startTime (expressed as hour,minute,second in a datetime object)
         # [smallBlind, bigBlind]
         # ante
-        # So, for example: [40, [50, 100], 10]
+        # So, for example: [datetime.time(0,40,0), [50, 100], 10]
         # means:
         # At time=40 minutes after start of game
         # [smallBlind=50, bigBlind=100]
         # ante = 10
         #
-        self.blindsAndAntes = { [0,  [10, 20], 0], \
-                                [20, [20, 40], 0], \
-                                [40, [50, 100], 10], \
-                                [60, [100, 200], 20]  }
+        self.blindsAndAntes = { [datetime.time(0,0,0) ,  [10, 20], 0], \
+                                [datetime.time(0,20,0) [20, 40], 0], \
+                                [datetime.time(0,40,0), [50, 100], 10], \
+                                [datetime.time(1,0,0), [100, 200], 20]  }
 
 # The TexasHoldemGameDefinition encapsulates the
 # characteristics of a Texas Hold'em game
@@ -38,7 +40,7 @@ class TexasHoldemGameDefinition:
     def getNumBettingRounds(self):
         return self.numBettingRounds
 
-    def getBlinds(self):
+    def getBlindsAndAntes(self):
         return self.blindsAndAntes
 
     def getNumCardsPerBettingRound(self):

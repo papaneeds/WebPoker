@@ -3,6 +3,10 @@
 #from Player import Player
 #from Table import Table
 from datetime import datetime
+# This is the poker hand dealer and hand evaluator
+import treys
+from treys import Deck
+
 #from TexasHoldemGameDefinition import TexasHoldemGameDefinition
 
 class Game:
@@ -25,6 +29,8 @@ class Game:
             currentBettorPosition = None
             playersInHand = None
             currentBlindsAndAntes = None
+            # Use the deck implementation from Treys
+            deck = Deck()
 
             # When you are just starting out the hand then
             # you have to initialize a bunch of things
@@ -74,6 +80,17 @@ class Game:
                 for seatNumber in playersInHand:
                     self.table.addToCurrentBet(seatNumber, self.currentBlindsAndAntes[2])
 
-            # Now the dealer deals out the cards    
+            # Now the dealer deals out the cards to each player
+            # For this use the deck implementation from Treys
+            for seatNumber in playersInHand:
+               # The number of cards each player is dealt
+                # is held in the 0 element of numCardsPerBettingRound
+                for cardNumber in range(self.gameDefinition.getNumCardsPerBettingRound()[handRound][0]):
+                    playerCards = self.table.getCards(seatNumber)
+                    drawCard = deck.draw(1)
+                    playerCards.append(drawCard)
+
+            # Now, the dealer deals out the board cards
+            
           
 

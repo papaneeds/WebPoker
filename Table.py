@@ -26,7 +26,7 @@ class Table:
           # The current pot
           self.pot = 0
           # The current board cards
-          self.boardCards = None
+          self.boardCards = []
 
     def getTableNumber(self):
         return self.tableNumber
@@ -194,6 +194,18 @@ class Table:
             # at positionOfPlayer. Set that seat to None.
             self.seats[positionOfPlayer] = None 
             return True
+    
+    # This function returns the cards of the player
+    # sitting at seatNumber
+    # Returns:
+    #    If successful: The current list of cards in front of the player
+    #    If unsuccessful: None
+    def getCards(self, seatNumber):
+        seat = self.seats[seatNumber]
+        if seat is not None:
+            return seat.getCards()
+        else:
+            return None
 
 # The Seat class encapsulates the characteristics
 # of a seat at the table.
@@ -204,6 +216,10 @@ class Seat:
         # The playerState variable holds an instance
         # of the PlayerState class
         self.playerState = None
+        self.cards = []
+
+    def getCards(self):
+        return self.cards
 
     def setPlayerState(self, playerState):
         self.playerState = playerState
@@ -223,6 +239,6 @@ class Seat:
     def setPlayer(self, player):
         self.player = player
 
-    def addToCurrentBet(self, amount)
+    def addToCurrentBet(self, amount):
         self.currentBet += amount
 

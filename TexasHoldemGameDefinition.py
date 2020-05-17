@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 class BlindsAndAntes:
     def __init__(self):
@@ -6,16 +6,16 @@ class BlindsAndAntes:
         # startTime (expressed as hour,minute,second in a datetime object)
         # [smallBlind, bigBlind]
         # ante
-        # So, for example: [datetime.time(0,40,0), [50, 100], 10]
+        # So, for example: [40, [50, 100], 10]
         # means:
         # At time=40 minutes after start of game
         # [smallBlind=50, bigBlind=100]
         # ante = 10
         #
-        self.blindsAndAntes = { [datetime.time(0,0,0) ,  [10, 20], 0], \
-                                [datetime.time(0,20,0) [20, 40], 0], \
-                                [datetime.time(0,40,0), [50, 100], 10], \
-                                [datetime.time(1,0,0), [100, 200], 20]  }
+        self.blindsAndAntes = [[ 0,  [10, 20], 0], \
+                                20, [20, 40], 0], \
+                                40, [50, 100], 10], \
+                                60, [100, 200], 20]  ]
 
 # The TexasHoldemGameDefinition encapsulates the
 # characteristics of a Texas Hold'em game
@@ -40,8 +40,48 @@ class TexasHoldemGameDefinition:
     def getNumBettingRounds(self):
         return self.numBettingRounds
 
+    # Returns the current blinds and antes structure
+    # Not recommended to use this function as the internal
+    # structure of blindsAndAntes may change and break your
+    # code
     def getBlindsAndAntes(self):
-        return self.blindsAndAntes
+        return self.blindsAndAntes()
+
+    # Returns a list of the current blinds at currentTime
+    # indexed by 0 being the player immediately clockwise from 
+    # the dealer, and the current blind level (indexed starting from
+    # 0)
+    def getCurrentBlinds(self, timeGameStart):
+        # Find the time range that bounds timeGameStart
+        for i in range(len(self.blindsAndAntes[0])-1):
+            # Element [i][0] is the time
+            # Element [i][1] contains the blinds
+            currentTime = datetime.now()
+            timeIntervalStart = timeGameStart+ timedelta(minutes=self.blindsAndAntes[i][0])
+            timeIntervalEnd = timeGameStart+ timedelta(minutes=self.blindsAndAntes[i+1][0])
+            if currentTime <= timeIntervalEnd and \
+                currentTime > timeIntervalStart:
+                    return [self.currentBlindsAndAntes[i][1], i]
+        # Else return the largest blind (assume that the blinds
+        # are maxed out)
+        return self.blindsAndAntes[len(self.blindsAndAntes)-1][1]
+
+    # Returns the current antes at the currentTime
+    #  
+    def getCurrentAntes(self, timeGameStart)
+        # Find the time range that bounds timeGameStart
+        for i in range(len(self.blindsAndAntes[0])-1):
+            # Element [i][0] is the time
+            # Element [i][2] contains the antes
+            currentTime = datetime.now()
+            timeIntervalStart = timeGameStart+ timedelta(minutes=self.blindsAndAntes[i][0])
+            timeIntervalEnd = timeGameStart+ timedelta(minutes=self.blindsAndAntes[i+1][0])
+            if currentTime <= timeIntervalEnd and \
+                currentTime > timeIntervalStart:
+                    return self.currentBlindsAndAntes[i][2]
+        # Else return the last ante (assume that the antes
+        # are maxed out)
+        return self.blindsAndAntes[len(self.blindsAndAntes)-1][2]
 
     def getNumCardsPerBettingRound(self):
         return self.numCardsPerBettingRound

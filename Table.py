@@ -6,6 +6,12 @@ class PlayerState(Enum):
     ACTIVE = 1
     # BUSTED means that at the start of the hand the player had no money
     BUSTED = 0
+
+class IndexStart(Enum):
+    # Start indexing at seatIndex = 0
+    INDEX_START_AT_ZERO = 0
+    # Start indexing at seatIndex = dealerSeat
+    INDEX_START_AT_DEALER_SEAT = 1
         
 
 # The Table class encapsulates the characteristics
@@ -27,7 +33,45 @@ class Table:
           self.pot = 0
           # The current board cards
           self.boardCards = []
+          # The antes paid by each player at the table
+          self.antes = None
+          # The blinds paid by each player
+          self.blinds = None
 
+    # This function resets the table to get ready for the next hand
+    def resetTableForNextHand(self):
+        self.boardCards = []
+        self.antes = None
+        self.blinds = None
+
+    # This function records the antes that a player in a seat paid
+    def setAnte(self, seatIndex, ante):
+        self.antes[seatIndex] = ante
+
+    # This function returns a dictionary of all the antes that have
+    # been paid in this hand
+    def getAntes(self):
+        return self.antes
+
+    # This function records the blinds that a player in a seat paid
+    def setBlind(self, seatIndex, blind):
+        self.blinds[seatIndex] = blind
+
+    # This function returns the blind that a player in seatIndex paid
+    # Inputs: the seatIndex of the player
+    # Returns:
+    #    if successful returns the blind paid by seatIndex
+    #    if unsuccessful returns None. (This could happen if you have
+    #       asked for a seatIndex that isn't at this table)
+    def getBlindBySeat(self, seatIndex): xxx asfdjaslfd continue here
+        if seatIndex in self.blinds: 
+            return self.blinds[seatIndex]
+        else:
+            return None
+
+    def getBoardCards(self):
+        return self.boardCards
+        
     def getTableNumber(self):
         return self.tableNumber
 
@@ -43,14 +87,63 @@ class Table:
     def setTimeGameStart(self, timeGameStart):
         self.timeGameStart = timeGameStart
 
-    # find the next occupied seat from the dealer
-    # seat.
+    # Get a list of the occupied seats.
+    # Note that you still need to check whether the returned
+    # dictionary to see whether the player in
+    # the seat is ACTIVE or BUSTED
+    # 
+    # Inputs: 
+    #   indexStart - indicates where to start the indexing (at 0 or the
+    #       dealerSeat)
+    #   
+    # Returns:
+    #   if successful returns a dictionary of key,value pairs where
+    #       key=seatIndex (starting at 0)
+    #       value = seat (A Seat object describing the player sitting
+    #                     in the seat)
+    #   if unsuccessful (there are no occupied seats) returns -1
+    #
+    def getOccupiedSeats(self, indexStart):
+        occupiedSeats = {}
+        offset = None
+        if (indexStart == IndexStart.INDEX_START_AT_ZERO):
+            offset = 0
+        if (indexStart == IndexStart.INDEX_START_AT_DEALER_SEAT):
+            offset = self.dealerSeat
+
+        for i in range(1, self.numSeats):
+            seatIndex = (offset + i) % self.numSeats
+            if (self.seats[seatIndex] is not None):
+                # You've found the next unoccupied seat
+                occupiedSeats[seatIndex] = self.seats[seatIndex].getPlayer.g
+
+        if len(occupiedSeats) == 0:
+            # There are no occupied seats
+            # Return an error
+            return -1
+        else:
+            return occupiedSeats        
+
+
+
+    # Find the next occupied seat
+    # 
+    # Inputs: 
+    #   indexStart - indicates where to start the indexing (at 0 or the
+    #       dealerSeat)
+    #   
     # Returns:
     #   if successful returns the next occupied seatNumber index
     #   if unsuccessful returns -1 
-    def getNextOccupiedSeat(self):
+    def getNextOccupiedSeat(self, indexStart):
+        offset = None
+        if (indexStart == IndexStart.INDEX_START_AT_ZERO):
+            offset = 0
+        if (indexStart == IndexStart.INDEX_START_AT_DEALER_SEAT):
+            offset = self.dealerSeat
+
         for i in range(1, self.numSeats):
-            seatIndex = (self.dealerSeat + i) % self.numSeats
+            seatIndex = (offset + i) % self.numSeats
             if (self.seats[seatIndex] is not None):
                 # You've found the next unoccupied seat
                 return seatIndex
@@ -66,7 +159,7 @@ class Table:
     #   else if unsuccessful then return -1
     def moveDealerButton(self):
         if self.numPlayers > 1 :
-            self.dealerSeat = self.getNextOccupiedSeat()
+            self.dealerSeat = self.getNextOccupiedSeat(IndexStart.INDEX_START_AT_DEALER_SEAT)
             return self.dealerSeat
         else:
             return -1
@@ -113,14 +206,18 @@ class Table:
         else:
             return None
             
+    # This function returns the seat number of the dealer
+    def getDealerSeat(self):
+        return self.dealerSeat
+        
     # This function returns a list of seatNumbers, starting
-    # at the player to the left of the dealer (the small blind), 
+    # at the player clockwise to the the dealer (the small blind), 
     # which are currently occupied by
     # players that have tableState = ACTIVE
     # Returns: A list of active players
     def getPlayersInHand(self):
         occupiedSeatIndices = []
-        for i in range(self.dealerSeat+1, self.numSeats+dealerSeat+1):
+        for i in range(self.dealerSeat+1, self.numSeats+self.dealerSeat+1):
             seatNumber = i % self.numSeats
             if self.seats[seatNumber] is not None:
                 # Check to make sure that is player is not busted

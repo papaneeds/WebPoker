@@ -45,12 +45,12 @@ class Table:
         self.blinds = None
 
     # This function records the antes that a player in a seat paid
-    def setAnte(self, seatIndex, ante):
+    def payAnte(self, seatIndex, ante):
         self.antes[seatIndex] = ante
 
     # This function returns a dictionary of all the antes that have
     # been paid in this hand
-    def getAntes(self):
+    def getAllAntesPaid(self):
         return self.antes
 
     # This function records the blinds that a player in a seat paid
@@ -63,7 +63,7 @@ class Table:
     #    if successful returns the blind paid by seatIndex
     #    if unsuccessful returns None. (This could happen if you have
     #       asked for a seatIndex that isn't at this table)
-    def getBlindBySeat(self, seatIndex): xxx asfdjaslfd continue here
+    def getBlindBySeat(self, seatIndex):
         if seatIndex in self.blinds: 
             return self.blinds[seatIndex]
         else:

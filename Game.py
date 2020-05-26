@@ -28,10 +28,7 @@ class Game:
         # the game.
         self.table.moveDealerButton()
 
-        # Initialize the Hand History
-        handHistory = HandHistory(self.gameDefinition.getNumBettingRounds())
-
-        for handRound in range(self.gameDefinition.getNumBettingRounds()):
+        for bettingRound in range(self.gameDefinition.getNumBettingRounds()):
             currentMaxBet = 0
             currentBettorPosition = None
             playersInHand = None
@@ -53,7 +50,7 @@ class Game:
 
             # When you are just starting out the hand then
             # you have to initialize a bunch of things
-            if handRound == 0:
+            if bettingRound == 0:
                 # Set whether the player has chips or is busted.
                 # If the player does not have chips then then
                 # cannot participate in this hand (they are BUSTED
@@ -73,19 +70,19 @@ class Game:
                 for seatNumber in playersInHand:
                     self.table.setCurrentBet(seatNumber, 0)
 
-                # Set the current blinds and current blind level
-                [currentBlinds, currentBlindLevel] = gameDefininiton.getCurrentBlinds(self.table.getTimeGameStart())
-
-                # Set the current antes
-                self.currentAntes = gameDefininiton.getCurrentAntes(self.table.getTimeGameStart())
+                # get the current blinds, antes and current blind level
+                [currentBlinds, currentAntes, currentBlindLevel] = self.gameDefinition.getCurrentBlindsAndAntes(self.table.getTimeGameStart())
 
                 # Initialize the hand history. This object will
                 # hold the history of the way that the hand plays
                 # out. The "print" function of this object is
                 # used to see the hand history in human readable
                 # format.
-                handHistory = HandHistory(self.table, handNumber, 
-                    currentBlinds, currentBlindLevel, currentAntes)
+                handHistory = HandHistory(self.table.getTableNumber, 
+                            self.handNumber, 
+                            currentBlinds, 
+                            currentBlindLevel, 
+                            currentAntes)
 
                 # Make the players pay the antes
                 for seatNumber in playersInHand:
@@ -100,15 +97,15 @@ class Game:
                 # The currentBlindsAndAntes[1] list contains a list
                 # of the blinds
                 # First the blinds
-                for i in range(len(self.currentBlinds)):
-                    blind = self.currentBlinds[i]
+                for i in range(len(currentBlinds)):
+                    blind = currentBlinds[i]
                     self.table.addToCurrentBet(playersInHand[i], blind)
                     handHistory.payBlind(seatNumber, blind)
 
                 # The bets start out at the player to the right of the
                 # big blind
                 #   
-                numBlindPositions = len(self.currentBlinds)
+                numBlindPositions = len(currentBlinds)
                 currentBettorPosition = playersInHand[0 + numBlindPositions]
 
                 # Now the dealer deals out the cards to each player
@@ -116,7 +113,7 @@ class Game:
                 for seatNumber in playersInHand:
                    # The number of cards each player is dealt
                     # is held in the 0 element of numCardsPerBettingRound
-                    for cardNumber in range(self.gameDefinition.getNumCardsPerBettingRound()[handRound][0]):
+                    for cardNumber in range(self.gameDefinition.getNumCardsPerBettingRound(bettingRound)[0]):
                         playerCards = self.table.getCards(seatNumber)
                         drawCard = deck.draw(1)
                         playerCards.append(drawCard)
@@ -134,9 +131,8 @@ class Game:
                 # This information is contained in the 
                 # HandHistory.print() function.
 
-            # Now, the dealer deals out the board cards
-            # The number of board cards is in the numCardsPerBettingRound[handround][1]
-            for cardNumber in range(self.gameDefinition.getNumCardsPerBettingRound()[handRound][1]):
+                # Now, the dealer deals out the board cards
+                for cardNumber in range(self.gameDefinition.getNumCardsPerBettingRound(bettingRound)[1]):
                     boardCards = self.table.getBoardCards()
                     drawCard = deck.draw(1)
                     playerCards.append(drawCard)

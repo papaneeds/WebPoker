@@ -13,6 +13,10 @@ class HandHistory:
         # This set holds the antes paid by each player
         # The key is the seatNumber and the value is the ante
         self.antesPaid = {}
+        # This set holds the blinds paid by each player
+        # The key is the seatNumber and the value is the blind
+        self.blindsPaid = {}
+
         self.handNumber = handNumber
         self.table = table
 
@@ -54,15 +58,15 @@ class HandHistory:
         # Example format: Seat 2: theo lecrow (6540 in chips)
         for seatIndex in occupiedSeats:
             player = occupiedSeats['seatIndex'].getPlayer()
-            textOutput += 'Seat ' + seatIndex 
-            + ':' +  player.getName() 
+            textOutput += 'Seat ' + seatIndex \
+            + ':' +  player.getName() \
             + '(' + player.getStack() + ' in chips)'
         
         # Loop over each player that has paid an Ante
         # Example format: Donktastic12: posts the ante 15
         for seatIndex in self.antesPaid:
             player = occupiedSeats['seatIndex'].getPlayer()
-            textOutput += player.getName() 
+            textOutput += player.getName() \
             + ': posts the ante' + self.antesPaid[seatIndex]
 
         # Print out this player's Hole Cards
@@ -82,7 +86,7 @@ class HandHistory:
                     # by the Treys module. Convert them, one-by-one, into
                     # string representations
                     for i in range(len(playerCards)):
-                        strCard = treys.Card.int_to_str(card[i])
+                        strCard = treys.Card.int_to_str(playerCards[i])
                         textOutput += strCard
                         if i < len(playerCards) - 1:
                             textOutput += ' '
@@ -95,6 +99,9 @@ class HandHistory:
 
     def payAnte(self, seatNumber, ante):
         self.antesPaid[seatNumber]=ante
+
+    def payBlind(self, seatNumber, blind):
+        self.blindsPaid[seatNumber]=blind
 
     def getAntesPaid(self):
         return self.antesPaid

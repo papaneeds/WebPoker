@@ -14,8 +14,8 @@ lobby = Lobby("RubesAndDonks", 20)
 stackSize = 1000
 try:
     lobby.addPlayerToWaitingList(Player(1, stackSize, "Joe Blow"))
-    lobby.addPlayerToWaitingList(Player(2,stackSize, "Freddy Mercury"))
-    lobby.addPlayerToWaitingList(Player(3,stackSize,"Harry Legg"))
+    lobby.addPlayerToWaitingList(Player(2, stackSize, "Freddy Mercury"))
+    lobby.addPlayerToWaitingList(Player(3, stackSize, "Harry Legg"))
 except:
     print("Could not add a player to the lobby")
 
@@ -33,29 +33,30 @@ while (numberOfEmptySeatsAtTable > 0):
     if (player is not None):
         # add them to the table
         if (table.addPlayerToTable(player)):
-            print("Successfully added player " + player.getName() + " to table " + table.getTableNumber())
+            print("Successfully added player " + player.getName() +
+                  " to table " + str(table.getTableNumber()))
             numberOfEmptySeatsAtTable = table.getNumSeats() - table.getNumPlayers()
         else:
             # This should not happen. It's an error
-            print("ERROR. was not able to add player" + player.getName() + "to table " + table.getTableNumber)
+            print("ERROR. was not able to add player" +
+                  player.getName() + "to table " + str(table.getTableNumber))
             exit
-    else:           
-         # There are no more players in the lobby
-        print("There are " + numberOfEmptySeatsAtTable + \
-                " empty seats at the table left. However, there is no one left in the lobby")
+    else:
+        # There are no more players in the lobby
+        print("There are " + str(numberOfEmptySeatsAtTable) +
+              " empty seats at the table left. However, there is no one left in the lobby")
         # break out of the while loop by setting the number of empty
         # seats to a negative number
         numberOfEmptySeatsAtTable = -1
 
 # There have to be at least 2 players to play the game.
-# If you have less than two players then wait until another 
+# If you have less than two players then wait until another
 # player shows up.
 # ToDo: Implement the loop that waits for the second player
 #       to show up
 
-if table.getNumPlayers > 1:
+if table.getNumPlayers() > 1:
     # Now, play the game
-    game = Game(table, TexasHoldemGameDefinition)
+    gameDefinition = TexasHoldemGameDefinition()
+    game = Game(table, gameDefinition)
     game.play()
-
- 

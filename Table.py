@@ -101,30 +101,23 @@ class Table:
     #       key=seatIndex (starting at 0)
     #       value = seat (A Seat object describing the player sitting
     #                     in the seat)
-    #   if unsuccessful (there are no occupied seats) returns -1
+    #   if unsuccessful (there are no occupied seats) returns []
     #
-    def getOccupiedSeats(self, indexStart):
-        occupiedSeats = {}
+    def getOccupiedSeatIndices(self, indexStart):
+        occupiedSeatIndices = []
         offset = None
         if (indexStart == IndexStart.INDEX_START_AT_ZERO):
             offset = 0
         if (indexStart == IndexStart.INDEX_START_AT_DEALER_SEAT):
             offset = self.dealerSeat
 
-        for i in range(1, self.numSeats):
-            seatIndex = (offset + i) % self.numSeats
-            if (self.seats[seatIndex] is not None):
+        for i in range(offset, self.numSeats+offset):
+            seatIndex = i % self.numSeats
+            if self.seats[seatIndex] is not None:
                 # You've found the next unoccupied seat
-                occupiedSeats[seatIndex] = self.seats[seatIndex].getPlayer.g
+                occupiedSeatIndices.append(seatIndex)
 
-        if len(occupiedSeats) == 0:
-            # There are no occupied seats
-            # Return an error
-            return -1
-        else:
-            return occupiedSeats        
-
-
+        return occupiedSeatIndices        
 
     # Find the next occupied seat
     # 
@@ -216,14 +209,14 @@ class Table:
     # players that have tableState = ACTIVE
     # Returns: A list of active players
     def getPlayersInHand(self):
-        occupiedSeatIndices = []
+        activeSeatIndices = []
         for i in range(self.dealerSeat+1, self.numSeats+self.dealerSeat+1):
             seatNumber = i % self.numSeats
             if self.seats[seatNumber] is not None:
                 # Check to make sure that is player is not busted
                 if self.seats[seatNumber].playerState == PlayerState.ACTIVE:
-                    occupiedSeatIndices.append(seatNumber)
-        return occupiedSeatIndices
+                    activeSeatIndices.append(seatNumber)
+        return activeSeatIndices
     
     # This function returns the current bet at a seat
     # Returns:

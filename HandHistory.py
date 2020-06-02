@@ -37,7 +37,7 @@ class HandHistory:
 
         # First some sanity checks
         # See if any seats are occupied at the table
-        occupiedSeats = self.table.getOccupiedSeats(Table.IndexStart.INDEX_START_AT_ZERO)
+        occupiedSeats = self.table.getOccupiedSeatIndices(Table.IndexStart.INDEX_START_AT_ZERO)
         if len(occupiedSeats) == 0:
             return None
         # See if 
@@ -48,26 +48,26 @@ class HandHistory:
 
         # Okay, so far so good. Construct the output string
         
-        textOutput = '*********** # ' + self.handNumber + ' **************'
+        textOutput = '*********** # ' + str(self.handNumber) + ' **************'
         textOutput += 'PokerStars Home Game Hand #211213343323: {Rubes and Donks} Tournament #2849064867, $20+$2 CAD Hold\'em No Limit - Level VII (60/120) - 2020/04/02 20:45:33 ET'
-        textOutput += 'Table \'' + self.table.getTableNumber() + '\' 9-max Seat #' 
-        + self.table.getDealerSeat() + ' is the button'
+        textOutput += 'Table \'' + str(self.table.getTableNumber()) + '\' 9-max Seat #' \
+        + str(self.table.getDealerSeat()) + ' is the button'
 
         # Now, loop over each player and print out their seat number,
         # name, and stack
         # Example format: Seat 2: theo lecrow (6540 in chips)
         for seatIndex in occupiedSeats:
             player = occupiedSeats['seatIndex'].getPlayer()
-            textOutput += 'Seat ' + seatIndex \
+            textOutput += 'Seat ' + str(seatIndex) \
             + ':' +  player.getName() \
-            + '(' + player.getStack() + ' in chips)'
+            + '(' + str(player.getStack()) + ' in chips)'
         
         # Loop over each player that has paid an Ante
         # Example format: Donktastic12: posts the ante 15
         for seatIndex in self.antesPaid:
             player = occupiedSeats['seatIndex'].getPlayer()
             textOutput += player.getName() \
-            + ': posts the ante' + self.antesPaid[seatIndex]
+            + ': posts the ante' + str(self.antesPaid[seatIndex])
 
         # Print out this player's Hole Cards
         # If seatIndex = -1 then print out all player's hole cards

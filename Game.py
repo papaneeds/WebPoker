@@ -33,6 +33,7 @@ class Game:
             currentBlinds = None
             currentAntes = None
             currentBlindLevel = None
+            handHistory = None
 
             # Use the deck implementation from Treys
             deck = Deck()
@@ -78,7 +79,7 @@ class Game:
                 # out. The "print" function of this object is
                 # used to see the hand history in human readable
                 # format.
-                handHistory = HandHistory(self.table.getTableNumber, 
+                handHistory = HandHistory(self.table, 
                             self.handNumber, 
                             currentBlinds, 
                             currentBlindLevel, 
@@ -120,6 +121,13 @@ class Game:
 
                     self.table.getPlayer(seatNumber).setCards(playerCards)
 
+
+            # Now, the dealer deals out the board cards
+            for cardNumber in range(self.gameDefinition.getNumCardsPerBettingRound(bettingRound)[1]):
+                boardCards = self.table.getBoardCards()
+                drawCard = deck.draw(1)
+                boardCards.append(drawCard)
+
             # Now, the dealer goes around the table and
             # asks each player what their bet is
             continueWithNextBettor = True
@@ -130,12 +138,11 @@ class Game:
                 # they need in order to make a decision
                 # This information is contained in the 
                 # HandHistory.print() function.
+                handHistory.print(-1)
 
-                # Now, the dealer deals out the board cards
-                for cardNumber in range(self.gameDefinition.getNumCardsPerBettingRound(bettingRound)[1]):
-                    boardCards = self.table.getBoardCards()
-                    drawCard = deck.draw(1)
-                    playerCards.append(drawCard)
+
+
+
 
                       
           

@@ -255,6 +255,19 @@ class Table:
         else:
             return False        
     
+
+    # This function sets all the player states at the table.
+    # The player's table state tells you whether the 
+    # player is ACTIVE or BUSTED
+    # (that is, whether they had money at the start of the
+    # hand or not)
+    # This function is intended to be called only once
+    # at the start of a hand.
+    # Returns: nothing 
+    def setAllPlayersTableState(self):
+        for seatNumber in range(len(self.seats)):
+            self.setPlayerTableState(seatNumber) 
+
     # This function sets the player state at the table.
     # The player's table state tells you whether the 
     # player is ACTIVE or BUSTED
@@ -270,8 +283,8 @@ class Table:
             # If they have money then set their table state
             # to ACTIVE.
             # If they don't have money then set their table
-            # state to BUSTED.
-            if seat.getPlayer.getStack() > 0:
+            # state to BUSTED
+            if seat.getPlayer().getStack() > 0:
                 seat.setPlayerState(PlayerState.ACTIVE)
             else:
                 seat.setPlayerState(PlayerState.BUSTED)

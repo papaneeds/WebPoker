@@ -16,8 +16,6 @@ class Game:
         self.table = table
         self.gameDefinition = gameDefinition
         self.handNumber = 0
-        self.currentAntes = None
-        self.currentAntes = []
 
     # This function actually plays the game of poker
     def play(self):
@@ -42,7 +40,9 @@ class Game:
             # This is the number of blind positions
             # For example, if there is a small blind and a big blind
             # then this is 2
-            numBlindPositions = len(self.gameDefinition.getBlindsAndAntes()[1])
+            numBlindPositions = len(self.gameDefinition.getCurrentBlindsAndAntes(
+                self.table.getTimeGameStart()
+            )[0])
 
             # This variable holds the seat number of the player
             # who is currently betting
@@ -56,15 +56,15 @@ class Game:
                 # cannot participate in this hand (they are BUSTED
                 # and must re-buy before they can participate in a
                 # subsequent hand) 
-                self.table.setPlayerTableState()
-
+                self.table.setAllPlayersTableState()
+                
                 # Get the list of players that are currently 
                 # in the hand. The first element of this list
-                # is the dealer
+                # is the player clockwise from the dealer
                 playersInHand = self.table.getPlayersInHand()
 
                 # Go around the table, starting at the seat to
-                # the left of the dealer (the small blind)
+                # clockwise to the dealer (the small blind)
                 # and for each participating
                 # player set their current bets to zero (0)
                 for seatNumber in playersInHand:
@@ -86,9 +86,8 @@ class Game:
 
                 # Make the players pay the antes
                 for seatNumber in playersInHand:
-                    ante = self.currentAntes
-                    self.table.addToCurrentBet(seatNumber, ante)
-                    handHistory.payAnte(seatNumber, ante)
+                    self.table.addToCurrentBet(seatNumber, currentAntes)
+                    handHistory.payAnte(seatNumber, currentAntes)
 
                 # Make each player pay the blinds
                 # The playersInHand list contains all the players
@@ -99,7 +98,8 @@ class Game:
                 # First the blinds
                 for i in range(len(currentBlinds)):
                     blind = currentBlinds[i]
-                    self.table.addToCurrentBet(playersInHand[i], blind)
+                    seatNumber = playersInHand[i]
+                    self.table.addToCurrentBet(seatNumber, blind)
                     handHistory.payBlind(seatNumber, blind)
 
                 # The bets start out at the player to the right of the

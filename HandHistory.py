@@ -49,25 +49,25 @@ class HandHistory:
         # Okay, so far so good. Construct the output string
         
         textOutput = '*********** # ' + str(self.handNumber) + ' **************'
-        textOutput += 'PokerStars Home Game Hand #211213343323: {Rubes and Donks} Tournament #2849064867, $20+$2 CAD Hold\'em No Limit - Level VII (60/120) - 2020/04/02 20:45:33 ET'
+        textOutput += 'PokerStars Home Game Hand #211213343323: {Rubes and Donks} Tournament #2849064867, $20+$2 CAD Hold\'em No Limit - Level VII (60/120) - 2020/04/02 20:45:33 ET\n'
         textOutput += 'Table \'' + str(self.table.getTableNumber()) + '\' 9-max Seat #' \
-        + str(self.table.getDealerSeat()) + ' is the button'
+        + str(self.table.getDealerSeat()) + ' is the button\n'
 
         # Now, loop over each player and print out their seat number,
         # name, and stack
         # Example format: Seat 2: theo lecrow (6540 in chips)
         for seatIndex in occupiedSeats:
-            player = occupiedSeats['seatIndex'].getPlayer()
+            player = self.table.getPlayer(seatIndex)
             textOutput += 'Seat ' + str(seatIndex) \
-            + ':' +  player.getName() \
-            + '(' + str(player.getStack()) + ' in chips)'
+            + ': ' +  player.getName() \
+            + ' (' + str(player.getStack()) + ' in chips)\n'
         
         # Loop over each player that has paid an Ante
         # Example format: Donktastic12: posts the ante 15
         for seatIndex in self.antesPaid:
-            player = occupiedSeats['seatIndex'].getPlayer()
+            player = self.table.getPlayer(seatIndex)
             textOutput += player.getName() \
-            + ': posts the ante' + str(self.antesPaid[seatIndex])
+            + ': posts the ante ' + str(self.antesPaid[seatIndex]) + '\n'
 
         # Print out this player's Hole Cards
         # If seatIndex = -1 then print out all player's hole cards
@@ -78,8 +78,8 @@ class HandHistory:
         if (seatIndexToPrintHoleCards == -1):
             # Print out the Hole Cards of all the Players            
             for seatIndex in occupiedSeats:
-                player = occupiedSeats['seatIndex'].getPlayer()           
-                textOutput += 'Dealt to ' + player.getName() + '['
+                player = self.table.getPlayer(seatIndex)          
+                textOutput += 'Dealt to ' + player.getName() + ' ['
                 if player.getCards() is not None:
                     playerCards = player.getCards()
                     # The cards are represented by a list of integers
@@ -91,7 +91,7 @@ class HandHistory:
                         if i < len(playerCards) - 1:
                             textOutput += ' '
 
-                textOutput += ']'
+                textOutput += ']\n'
 
         
 
